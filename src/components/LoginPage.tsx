@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Mail, Lock, ShieldCheck, ArrowLeft, Users } from 'lucide-react';
-import { Role } from '../types';
+import { useNavigate } from '@tanstack/react-router';
 
 interface LoginPageProps {
-  onNavigate: (view: 'landing' | 'login' | 'dashboard') => void;
-  onLoginSuccess: (role: Role) => void;
+  onLoginSuccess: (role: 'student' | 'operator') => void;
 }
 
-export default function LoginPage({ onNavigate, onLoginSuccess }: LoginPageProps) {
+export default function LoginPage({ onLoginSuccess }: LoginPageProps) {
+  const navigate = useNavigate();
   const [selectedRole, setSelectedRole] = useState<'student' | 'operator'>('student');
   const [email, setEmail] = useState('student@itats.ac.id');
   const [password, setPassword] = useState('password123');
@@ -40,7 +40,7 @@ export default function LoginPage({ onNavigate, onLoginSuccess }: LoginPageProps
         
         {/* Back Link */}
         <button
-          onClick={() => onNavigate('landing')}
+          onClick={() => navigate({ to: '/' })}
           className="inline-flex items-center space-x-2 text-xs font-bold text-[#64748B] hover:text-[#005CB9] mb-6 cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4 text-[#005CB9]" />

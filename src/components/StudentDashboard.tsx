@@ -29,22 +29,12 @@ import {
 import { Application, ServiceType, StudentProfile } from '../types';
 import { CAMPUS_SERVICES } from '../data';
 import RequirementsPage from './RequirementsPage';
+import { useAuth } from '../lib/auth';
+import { useApplications } from '../lib/applications';
 
-interface StudentDashboardProps {
-  applications: Application[];
-  onAddNewApplication: (newApp: Omit<Application, 'id' | 'submissionDate' | 'status'>) => void;
-  onLogout: () => void;
-  initialSelectedServiceTitle?: string;
-  clearPreSelectedService?: () => void;
-}
-
-export default function StudentDashboard({
-  applications,
-  onAddNewApplication,
-  onLogout,
-  initialSelectedServiceTitle,
-  clearPreSelectedService
-}: StudentDashboardProps) {
+export default function StudentDashboard() {
+  const { logout } = useAuth();
+  const { applications, addApplication } = useApplications();
   const [activeTab, setActiveTab] = useState<'dashboard' | 'apply' | 'status' | 'profile' | 'requirements'>('dashboard');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
@@ -75,15 +65,6 @@ export default function StudentDashboard({
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
-
-  useEffect(() => {
-    if (initialSelectedServiceTitle) {
-      setServiceType(initialSelectedServiceTitle as ServiceType);
-      setActiveTab('apply');
-      setSuccessMessage(false);
-      clearPreSelectedService?.();
-    }
-  }, [initialSelectedServiceTitle, clearPreSelectedService]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -116,7 +97,7 @@ export default function StudentDashboard({
     
     setIsSubmitting(true);
     setTimeout(() => {
-      onAddNewApplication({
+      addApplication({
         studentName: fullName,
         nim: studentId,
         nationality,
@@ -512,7 +493,7 @@ Generated At      : ${new Date().toISOString()}
           <button
             onClick={() => {
               setMobileMenuOpen(false);
-              onLogout();
+              logout();
             }}
             className="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-xs font-bold text-red-650 hover:bg-red-50 transition-all cursor-pointer"
           >

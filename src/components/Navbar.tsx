@@ -1,20 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Globe, LogIn, LayoutDashboard } from 'lucide-react';
-import { Role } from '../types';
+import { useNavigate, useLocation } from '@tanstack/react-router';
+import { useAuth } from '../lib/auth';
 
-interface NavbarProps {
-  currentRole: Role;
-  setCurrentRole: (role: Role) => void;
-  onNavigate: (view: 'landing' | 'login' | 'dashboard') => void;
-  currentView: 'landing' | 'login' | 'dashboard';
-}
-
-export default function Navbar({
-  currentRole,
-  setCurrentRole,
-  onNavigate,
-  currentView
-}: NavbarProps) {
+export default function Navbar() {
+  const { role, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isLandingPage = location.pathname === '/';
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -28,8 +21,8 @@ export default function Navbar({
 
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
-    if (currentView !== 'landing') {
-      onNavigate('landing');
+    if (!isLandingPage) {
+      navigate({ to: '/' });
       setTimeout(() => {
         const el = document.getElementById(id);
         if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -41,8 +34,8 @@ export default function Navbar({
   };
 
   const handleLogout = () => {
-    setCurrentRole('guest');
-    onNavigate('landing');
+    logout();
+    navigate({ to: '/' });
     setMobileMenuOpen(false);
   };
 
@@ -58,7 +51,7 @@ export default function Navbar({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo Brand left-aligned */}
-          <div className="flex items-center space-x-3 cursor-pointer shrink-0" onClick={() => onNavigate('landing')}>
+          <div className="flex items-center space-x-3 cursor-pointer shrink-0" onClick={() => navigate({ to: '/' })}>
             <div className="relative flex items-center justify-center p-1 rounded-xl bg-white border border-slate-150 shadow-sm w-12 h-12">
               <img
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaqqHEGMRQMx2Bku-uYKvmBhtzY7L4Vd91Bg&s"
@@ -119,9 +112,9 @@ export default function Navbar({
 
             <div className="h-4 w-px bg-slate-300"></div>
 
-            {currentRole === 'guest' ? (
+            {!isAuthenticated ? (
               <button
-                onClick={() => onNavigate('login')}
+                onClick={() => navigate({ to: '/login' })}
                 className="flex items-center space-x-2 bg-[#005CB9] hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all cursor-pointer border border-transparent whitespace-nowrap active:scale-95"
                 id="btn-login-cta"
               >
@@ -131,7 +124,7 @@ export default function Navbar({
             ) : (
               <div className="flex items-center space-x-2">
                 <button
-                  onClick={() => onNavigate('dashboard')}
+                  onClick={() => navigate({ to: role === 'student' ? '/student' : '/operator' })}
                   className="flex items-center space-x-1.5 bg-[#005CB9] hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all cursor-pointer"
                 >
                   <LayoutDashboard className="w-3.5 h-3.5" />
@@ -191,10 +184,10 @@ export default function Navbar({
           </div>
 
           <div className="pt-2">
-            {currentRole === 'guest' ? (
+            {!isAuthenticated ? (
               <button
                 onClick={() => {
-                  onNavigate('login');
+                  navigate({ to: '/login' });
                   setMobileMenuOpen(false);
                 }}
                 className="w-full flex items-center justify-center space-x-2 bg-[#005CB9] hover:bg-blue-700 text-white py-3 rounded-xl text-sm font-bold shadow-sm"
@@ -206,7 +199,7 @@ export default function Navbar({
               <div className="space-y-2">
                 <button
                   onClick={() => {
-                    onNavigate('dashboard');
+                    navigate({ to: role === 'student' ? '/student' : '/operator' });
                     setMobileMenuOpen(false);
                   }}
                   className="w-full flex items-center justify-center space-x-2 bg-[#005CB9] hover:bg-blue-700 text-white py-3 rounded-xl text-sm font-bold shadow-sm"

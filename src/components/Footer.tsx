@@ -1,10 +1,8 @@
 import { Mail, Phone, MapPin, Facebook, Instagram, Twitter, Youtube, ArrowUp } from 'lucide-react';
+import { useNavigate } from '@tanstack/react-router';
 
-interface FooterProps {
-  onNavigate: (view: 'landing' | 'login' | 'dashboard') => void;
-}
-
-export default function Footer({ onNavigate }: FooterProps) {
+export default function Footer() {
+  const navigate = useNavigate();
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -16,7 +14,7 @@ export default function Footer({ onNavigate }: FooterProps) {
           
           {/* Col-1: Brand representation */}
           <div className="lg:col-span-5 space-y-4">
-            <div className="flex items-center space-x-3 cursor-pointer" onClick={() => onNavigate('landing')}>
+            <div className="flex items-center space-x-3 cursor-pointer" onClick={() => navigate({ to: '/' })}>
               <div className="flex items-center justify-center p-1.5 rounded-xl bg-white border border-slate-150 shadow-sm w-12 h-12 shrink-0">
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaqqHEGMRQMx2Bku-uYKvmBhtzY7L4Vd91Bg&s"
@@ -89,7 +87,7 @@ export default function Footer({ onNavigate }: FooterProps) {
               <li>
                 <button
                   onClick={() => {
-                    onNavigate('landing');
+                    navigate({ to: '/' });
                     setTimeout(() => {
                       document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
                     }, 50);
@@ -102,7 +100,7 @@ export default function Footer({ onNavigate }: FooterProps) {
               <li>
                 <button
                   onClick={() => {
-                    onNavigate('landing');
+                    navigate({ to: '/' });
                     setTimeout(() => {
                       document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
                     }, 50);
@@ -115,7 +113,7 @@ export default function Footer({ onNavigate }: FooterProps) {
               <li>
                 <button
                   onClick={() => {
-                    onNavigate('landing');
+                    navigate({ to: '/' });
                     setTimeout(() => {
                       document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
                     }, 50);
@@ -128,7 +126,7 @@ export default function Footer({ onNavigate }: FooterProps) {
               <li>
                 <button
                   onClick={() => {
-                    onNavigate('landing');
+                    navigate({ to: '/' });
                     setTimeout(() => {
                       document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
                     }, 50);

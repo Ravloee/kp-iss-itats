@@ -17,18 +17,12 @@ import {
   Bell
 } from 'lucide-react';
 import { Application, ApplicationStatus } from '../types';
+import { useAuth } from '../lib/auth';
+import { useApplications } from '../lib/applications';
 
-interface OperatorDashboardProps {
-  applications: Application[];
-  onUpdateStatus: (id: string, status: ApplicationStatus, operatorNotes?: string) => void;
-  onLogout: () => void;
-}
-
-export default function OperatorDashboard({
-  applications,
-  onUpdateStatus,
-  onLogout
-}: OperatorDashboardProps) {
+export default function OperatorDashboard() {
+  const { logout } = useAuth();
+  const { applications, updateStatus } = useApplications();
   const [activeTab, setActiveTab] = useState<'dashboard' | 'applications' | 'students'>('dashboard');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
@@ -90,7 +84,7 @@ export default function OperatorDashboard({
 
   const handleDecision = (status: ApplicationStatus) => {
     if (!selectedApp) return;
-    onUpdateStatus(selectedApp.id, status, operatorNotes);
+    updateStatus(selectedApp.id, status, operatorNotes);
     setDecisionSuccess(true);
     setOperatorNotes('');
     setTimeout(() => {
@@ -225,7 +219,7 @@ export default function OperatorDashboard({
           <button
             onClick={() => {
               setMobileMenuOpen(false);
-              onLogout();
+              logout();
             }}
             className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 transition-all cursor-pointer"
           >
