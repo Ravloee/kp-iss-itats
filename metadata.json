@@ -1,0 +1,6 @@
+{
+  "name": "ITATS International Student Portal",
+  "description": "International Student Service (ISS-ITATS) for Institut Teknologi Adhi Tama Surabaya (ITATS) - supporting students and operators in administrative service requests, visas, KITAS, and campus information.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

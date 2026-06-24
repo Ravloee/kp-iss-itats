@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-itats-blue: #005CB9;
+  --color-itats-gold: #F4D000;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Custom Brand Utilities to ensure compatibility */
+.bg-itats-blue {
+  background-color: #005CB9;
+}
+.bg-itats-blue\/10 {
+  background-color: rgba(0, 92, 185, 0.1);
+}
+.bg-itats-blue\/20 {
+  background-color: rgba(0, 92, 185, 0.2);
+}
+.bg-itats-blue\/5 {
+  background-color: rgba(0, 92, 185, 0.05);
+}
+.bg-itats-gold\/10 {
+  background-color: rgba(244, 208, 0, 0.1);
+}
+.bg-itats-gold\/20 {
+  background-color: rgba(244, 208, 0, 0.2);
+}
+.text-itats-blue {
+  color: #005CB9;
+}
+.text-itats-gold {
+  color: #F4D000;
+}
+.border-itats-blue {
+  border-color: #005CB9;
+}
+.border-itats-gold {
+  border-color: #F4D000;
+}
+.border-itats-blue\/20 {
+  border-color: rgba(0, 92, 185, 0.2);
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.dark .glass {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Scrollbar styling */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
