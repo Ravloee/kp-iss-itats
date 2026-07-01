@@ -8,7 +8,7 @@ import {
   Menu,
   X,
 } from 'lucide-react';
-import { Link, useLocation } from '@tanstack/react-router';
+import { Link, useLocation, useNavigate } from '@tanstack/react-router';
 import { useAuth } from '../../lib/auth';
 import { useStudentProfile } from '../../lib/studentProfile';
 
@@ -30,6 +30,7 @@ export default function StudentSidebar({
   const { logout } = useAuth();
   const { profile } = useStudentProfile();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (to: string, exact?: boolean) =>
     exact ? location.pathname === to : location.pathname.startsWith(to);
@@ -101,9 +102,10 @@ export default function StudentSidebar({
           <hr className="my-4 border-slate-200" />
 
           <button
-            onClick={() => {
+            onClick={async () => {
               setMobileMenuOpen(false);
-              logout();
+              await logout();
+              navigate({ to: '/', replace: true });
             }}
             className="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-xs font-bold text-red-650 hover:bg-red-50 transition-all cursor-pointer"
           >
