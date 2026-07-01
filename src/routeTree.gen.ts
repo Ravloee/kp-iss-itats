@@ -16,6 +16,11 @@ import { Route as AuthStudentRouteImport } from './routes/_auth/student'
 import { Route as AuthOperatorRouteImport } from './routes/_auth/operator'
 import { Route as AuthStudentIndexRouteImport } from './routes/_auth/student/index'
 import { Route as AuthOperatorIndexRouteImport } from './routes/_auth/operator/index'
+import { Route as AuthStudentRequirementsRouteImport } from './routes/_auth/student/requirements'
+import { Route as AuthStudentProfileRouteImport } from './routes/_auth/student/profile'
+import { Route as AuthStudentApplyRouteImport } from './routes/_auth/student/apply'
+import { Route as AuthStudentApplicationsIndexRouteImport } from './routes/_auth/student/applications/index'
+import { Route as AuthStudentApplicationsAppIdRouteImport } from './routes/_auth/student/applications.$appId'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -51,20 +56,57 @@ const AuthOperatorIndexRoute = AuthOperatorIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthOperatorRoute,
 } as any)
+const AuthStudentRequirementsRoute = AuthStudentRequirementsRouteImport.update({
+  id: '/requirements',
+  path: '/requirements',
+  getParentRoute: () => AuthStudentRoute,
+} as any)
+const AuthStudentProfileRoute = AuthStudentProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthStudentRoute,
+} as any)
+const AuthStudentApplyRoute = AuthStudentApplyRouteImport.update({
+  id: '/apply',
+  path: '/apply',
+  getParentRoute: () => AuthStudentRoute,
+} as any)
+const AuthStudentApplicationsIndexRoute =
+  AuthStudentApplicationsIndexRouteImport.update({
+    id: '/applications/',
+    path: '/applications/',
+    getParentRoute: () => AuthStudentRoute,
+  } as any)
+const AuthStudentApplicationsAppIdRoute =
+  AuthStudentApplicationsAppIdRouteImport.update({
+    id: '/applications/$appId',
+    path: '/applications/$appId',
+    getParentRoute: () => AuthStudentRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/operator': typeof AuthOperatorRouteWithChildren
   '/student': typeof AuthStudentRouteWithChildren
+  '/student/apply': typeof AuthStudentApplyRoute
+  '/student/profile': typeof AuthStudentProfileRoute
+  '/student/requirements': typeof AuthStudentRequirementsRoute
   '/operator/': typeof AuthOperatorIndexRoute
   '/student/': typeof AuthStudentIndexRoute
+  '/student/applications/$appId': typeof AuthStudentApplicationsAppIdRoute
+  '/student/applications/': typeof AuthStudentApplicationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/student/apply': typeof AuthStudentApplyRoute
+  '/student/profile': typeof AuthStudentProfileRoute
+  '/student/requirements': typeof AuthStudentRequirementsRoute
   '/operator': typeof AuthOperatorIndexRoute
   '/student': typeof AuthStudentIndexRoute
+  '/student/applications/$appId': typeof AuthStudentApplicationsAppIdRoute
+  '/student/applications': typeof AuthStudentApplicationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -73,8 +115,13 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_auth/operator': typeof AuthOperatorRouteWithChildren
   '/_auth/student': typeof AuthStudentRouteWithChildren
+  '/_auth/student/apply': typeof AuthStudentApplyRoute
+  '/_auth/student/profile': typeof AuthStudentProfileRoute
+  '/_auth/student/requirements': typeof AuthStudentRequirementsRoute
   '/_auth/operator/': typeof AuthOperatorIndexRoute
   '/_auth/student/': typeof AuthStudentIndexRoute
+  '/_auth/student/applications/$appId': typeof AuthStudentApplicationsAppIdRoute
+  '/_auth/student/applications/': typeof AuthStudentApplicationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -83,10 +130,24 @@ export interface FileRouteTypes {
     | '/login'
     | '/operator'
     | '/student'
+    | '/student/apply'
+    | '/student/profile'
+    | '/student/requirements'
     | '/operator/'
     | '/student/'
+    | '/student/applications/$appId'
+    | '/student/applications/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/operator' | '/student'
+  to:
+    | '/'
+    | '/login'
+    | '/student/apply'
+    | '/student/profile'
+    | '/student/requirements'
+    | '/operator'
+    | '/student'
+    | '/student/applications/$appId'
+    | '/student/applications'
   id:
     | '__root__'
     | '/'
@@ -94,8 +155,13 @@ export interface FileRouteTypes {
     | '/login'
     | '/_auth/operator'
     | '/_auth/student'
+    | '/_auth/student/apply'
+    | '/_auth/student/profile'
+    | '/_auth/student/requirements'
     | '/_auth/operator/'
     | '/_auth/student/'
+    | '/_auth/student/applications/$appId'
+    | '/_auth/student/applications/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -155,6 +221,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthOperatorIndexRouteImport
       parentRoute: typeof AuthOperatorRoute
     }
+    '/_auth/student/requirements': {
+      id: '/_auth/student/requirements'
+      path: '/requirements'
+      fullPath: '/student/requirements'
+      preLoaderRoute: typeof AuthStudentRequirementsRouteImport
+      parentRoute: typeof AuthStudentRoute
+    }
+    '/_auth/student/profile': {
+      id: '/_auth/student/profile'
+      path: '/profile'
+      fullPath: '/student/profile'
+      preLoaderRoute: typeof AuthStudentProfileRouteImport
+      parentRoute: typeof AuthStudentRoute
+    }
+    '/_auth/student/apply': {
+      id: '/_auth/student/apply'
+      path: '/apply'
+      fullPath: '/student/apply'
+      preLoaderRoute: typeof AuthStudentApplyRouteImport
+      parentRoute: typeof AuthStudentRoute
+    }
+    '/_auth/student/applications/': {
+      id: '/_auth/student/applications/'
+      path: '/applications'
+      fullPath: '/student/applications/'
+      preLoaderRoute: typeof AuthStudentApplicationsIndexRouteImport
+      parentRoute: typeof AuthStudentRoute
+    }
+    '/_auth/student/applications/$appId': {
+      id: '/_auth/student/applications/$appId'
+      path: '/applications/$appId'
+      fullPath: '/student/applications/$appId'
+      preLoaderRoute: typeof AuthStudentApplicationsAppIdRouteImport
+      parentRoute: typeof AuthStudentRoute
+    }
   }
 }
 
@@ -171,11 +272,21 @@ const AuthOperatorRouteWithChildren = AuthOperatorRoute._addFileChildren(
 )
 
 interface AuthStudentRouteChildren {
+  AuthStudentApplyRoute: typeof AuthStudentApplyRoute
+  AuthStudentProfileRoute: typeof AuthStudentProfileRoute
+  AuthStudentRequirementsRoute: typeof AuthStudentRequirementsRoute
   AuthStudentIndexRoute: typeof AuthStudentIndexRoute
+  AuthStudentApplicationsAppIdRoute: typeof AuthStudentApplicationsAppIdRoute
+  AuthStudentApplicationsIndexRoute: typeof AuthStudentApplicationsIndexRoute
 }
 
 const AuthStudentRouteChildren: AuthStudentRouteChildren = {
+  AuthStudentApplyRoute: AuthStudentApplyRoute,
+  AuthStudentProfileRoute: AuthStudentProfileRoute,
+  AuthStudentRequirementsRoute: AuthStudentRequirementsRoute,
   AuthStudentIndexRoute: AuthStudentIndexRoute,
+  AuthStudentApplicationsAppIdRoute: AuthStudentApplicationsAppIdRoute,
+  AuthStudentApplicationsIndexRoute: AuthStudentApplicationsIndexRoute,
 }
 
 const AuthStudentRouteWithChildren = AuthStudentRoute._addFileChildren(

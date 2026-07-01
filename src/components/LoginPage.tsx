@@ -1,37 +1,28 @@
 import React, { useState } from 'react';
-import { Mail, Lock, ShieldCheck, ArrowLeft, Users } from 'lucide-react';
+import { Lock, ShieldCheck, ArrowLeft, Users } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
 
 interface LoginPageProps {
-  onLoginSuccess: (role: 'student' | 'operator') => void;
+  onLoginSuccess: (username: string, password: string) => void | Promise<void>;
 }
 
 export default function LoginPage({ onLoginSuccess }: LoginPageProps) {
   const navigate = useNavigate();
   const [selectedRole, setSelectedRole] = useState<'student' | 'operator'>('student');
-  const [email, setEmail] = useState('student@itats.ac.id');
+  const [username, setUsername] = useState('student');
   const [password, setPassword] = useState('password123');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleRoleToggle = (role: 'student' | 'operator') => {
     setSelectedRole(role);
-    if (role === 'student') {
-      setEmail('student@itats.ac.id');
-      setPassword('password123');
-    } else {
-      setEmail('operator@itats.ac.id');
-      setPassword('password123');
-    }
+    setUsername(role);
+    setPassword('password123');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-      onLoginSuccess(selectedRole);
-    }, 600);
+    Promise.resolve(onLoginSuccess(username, password)).finally(() => setIsLoading(false));
   };
 
   return (
@@ -139,22 +130,22 @@ export default function LoginPage({ onLoginSuccess }: LoginPageProps) {
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               
-              {/* Email Input */}
+              {/* Username Input */}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-[#334155] block">
-                  Email Address
+                  Username
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#64748B]">
-                    <Mail className="w-4 h-4" />
+                    <Users className="w-4 h-4" />
                   </div>
                   <input
-                    type="email"
+                    type="text"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-xs focus:ring-1 focus:ring-itats-blue bg-white text-slate-800 font-bold outline-none"
-                    placeholder="Enter your registered email"
+                    placeholder="Enter your username"
                   />
                 </div>
               </div>
@@ -202,8 +193,12 @@ export default function LoginPage({ onLoginSuccess }: LoginPageProps) {
                 <span className="text-slate-800 capitalize">{selectedRole}</span>
               </div>
               <div className="flex justify-between">
-                <span>Autofilled Email:</span>
-                <span className="text-[#005CB9] font-mono">{email}</span>
+                <span>Autofilled Username:</span>
+                <span className="text-[#005CB9] font-mono">{username}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Password:</span>
+                <span className="text-[#005CB9] font-mono">{password}</span>
               </div>
             </div>
           </div>

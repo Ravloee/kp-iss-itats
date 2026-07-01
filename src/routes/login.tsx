@@ -1,16 +1,17 @@
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
-import { getCurrentUser, useAuth } from '../lib/auth'
+import { getUser, useAuth } from '../lib/auth'
 import LoginPage from '../components/LoginPage'
 
 export const Route = createFileRoute('/login')({
-  beforeLoad: () => {
-    // Only check auth on client — server doesn't have in-memory auth state
-    if (typeof document !== 'undefined') {
-      const user = getCurrentUser()
-      if (user) {
-        const target = user.role === 'student' ? '/student' : '/operator'
-        throw redirect({ to: target })
-      }
+  validateSearch: (search: Record<string, unknown>): { redirect?: string } => {
+    const redirect = typeof search.redirect === 'string' ? search.redirect : undefined
+    return redirect ? { redirect } : {}
+  },
+  beforeLoad: async () => {
+    const user = await getUser()
+    if (user) {
+      const target = user.role === 'student' ? '/student' : '/operator'
+      throw redirect({ to: target })
     }
   },
   component: LoginRoute,
@@ -20,10 +21,14 @@ function LoginRoute() {
   const { login } = useAuth()
   const navigate = useNavigate()
 
-  const handleLoginSuccess = (role: 'student' | 'operator') => {
-    login(role)
-    const target = role === 'student' ? '/student' : '/operator'
-    navigate({ to: target, replace: true })
+  const handleLoginSuccess = async (username: string, password: string) => {
+    try {
+      const user = await login(username, password)
+      const target = user.role === 'student' ? '/student' : '/operator'
+      navigate({ to: target, replace: true })
+    } catch (err) {
+      alert('Login gagal: username atau password salah.')
+    }
   }
 
   return <LoginPage onLoginSuccess={handleLoginSuccess} />
